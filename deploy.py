@@ -23,14 +23,7 @@ import torch
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 from flask import Flask, request, jsonify
 from dotenv import load_dotenv
-from huggingface_hub import login
 
-load_dotenv(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".env"))
-
-HF_TOKEN = os.getenv("HF_TOKEN")
-if HF_TOKEN is None:
-    raise RuntimeError("HF_TOKEN not found in .env")
-login(token=HF_TOKEN)
 
 # ─────────────────────────────────────────────
 # CONFIG
