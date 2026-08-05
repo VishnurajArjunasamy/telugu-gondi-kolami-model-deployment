@@ -1,4 +1,4 @@
-# NLLB Telugu-Gondi — Deployment Guide
+# NLLB Telugu-Gondi MT 
 
 ## Requirements
 
