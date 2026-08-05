@@ -1,0 +1,13 @@
+torch
+torchvision
+torchaudio
+transformers
+peft
+datasets
+huggingface_hub
+bitsandbytes
+flask
+numpy
+tqdm
+sacrebleu
+python-dotenv
