@@ -18,6 +18,33 @@
 
 ---
 
+## Supported language pairs
+
+English ↔ Telugu pairs are handled by the [Bhashaverse / IIIT API](https://ssmt.iiit.ac.in).  
+English ↔ Gondi is served via **pivot translation** (eng ↔ tel via IIIT, tel ↔ gon via local model).  
+Paragraph-level input is supported — text is split on sentence boundaries automatically.
+
+| Pair | v3 | v3.1 | Route |
+|---|:---:|:---:|---|
+| tel → gon | ✓ | ✓ | local model |
+| gon → tel | | ✓ | local model |
+| eng → tel | ✓ | ✓ | IIIT API |
+| tel → eng | ✓ | ✓ | IIIT API |
+| eng → gon | ✓ | ✓ | IIIT (eng→tel) → local (tel→gon) |
+| gon → eng | | ✓ | local (gon→tel) → IIIT (tel→eng) |
+
+---
+
+## Language codes
+
+| Language | Code |
+|---|---|
+| English | `eng_Latn` |
+| Telugu | `tel_Telu` |
+| Gondi (Adilabad) | `wsg_Telu` |
+
+---
+
 ## 1. Clone the repo
 
 ```bash
@@ -80,26 +107,32 @@ Starts on `http://0.0.0.0:5000`.
 
 ## 6. API
 
-### Language codes
+### `POST /v3/translate`
 
-| Language | Code |
-|---|---|
-| Telugu | `tel_Telu` |
-| Gondi (Adilabad) | `wsg_Telu` |
-
----
-
-### `POST /v3/translate` — Telugu → Gondi only
+Supports: tel→gon, eng↔tel, eng→gon
 
 ```bash
+# Telugu → Gondi
 curl -X POST http://localhost:5000/v3/translate \
   -H "Content-Type: application/json" \
   -d '{"src_sentence": "నీళ్ళు తాగండి", "src_lang": "tel_Telu", "tgt_lang": "wsg_Telu"}'
+
+# English → Telugu
+curl -X POST http://localhost:5000/v3/translate \
+  -H "Content-Type: application/json" \
+  -d '{"src_sentence": "Drink water", "src_lang": "eng_Latn", "tgt_lang": "tel_Telu"}'
+
+# English → Gondi  (pivot via Telugu)
+curl -X POST http://localhost:5000/v3/translate \
+  -H "Content-Type: application/json" \
+  -d '{"src_sentence": "Drink water", "src_lang": "eng_Latn", "tgt_lang": "wsg_Telu"}'
 ```
 
 ---
 
-### `POST /v3.1/translate` — Telugu ↔ Gondi
+### `POST /v3.1/translate`
+
+Supports: tel↔gon, eng↔tel, eng↔gon
 
 ```bash
 # Telugu → Gondi
@@ -111,6 +144,16 @@ curl -X POST http://localhost:5000/v3.1/translate \
 curl -X POST http://localhost:5000/v3.1/translate \
   -H "Content-Type: application/json" \
   -d '{"src_sentence": "నీళ్ తాగ్వల్", "src_lang": "wsg_Telu", "tgt_lang": "tel_Telu"}'
+
+# English → Gondi  (pivot via Telugu)
+curl -X POST http://localhost:5000/v3.1/translate \
+  -H "Content-Type: application/json" \
+  -d '{"src_sentence": "Drink water", "src_lang": "eng_Latn", "tgt_lang": "wsg_Telu"}'
+
+# Gondi → English  (pivot via Telugu)
+curl -X POST http://localhost:5000/v3.1/translate \
+  -H "Content-Type: application/json" \
+  -d '{"src_sentence": "నీళ్ తాగ్వల్", "src_lang": "wsg_Telu", "tgt_lang": "eng_Latn"}'
 ```
 
 **Response:**
@@ -118,9 +161,9 @@ curl -X POST http://localhost:5000/v3.1/translate \
 ```json
 {
   "model": "v3.1",
-  "src_lang": "tel_Telu",
+  "src_lang": "eng_Latn",
   "tgt_lang": "wsg_Telu",
-  "src_sentence": "నీళ్ళు తాగండి",
+  "src_sentence": "Drink water",
   "tgt_sentence": "..."
 }
 ```
