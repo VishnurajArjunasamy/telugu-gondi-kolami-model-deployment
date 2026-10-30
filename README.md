@@ -22,7 +22,8 @@
 
 English ↔ Telugu pairs are handled by the [Bhashaverse / IIIT API](https://ssmt.iiit.ac.in).  
 English ↔ Gondi is served via **pivot translation** (eng ↔ tel via IIIT, tel ↔ gon via local model).  
-Paragraph-level input is supported — text is split on sentence boundaries automatically.
+Paragraph-level input is supported — text is split on newlines and sentence boundaries (। . ? !) automatically.
+Sentences longer than 100 tokens (or with no punctuation) are further split on clause boundaries (, ; :), then on words, before translation.
 
 | Pair | v3 | v3.1 | Route |
 |---|:---:|:---:|---|
